@@ -85,7 +85,7 @@ for name, attrs in pairs {
 
   CurSearch = { fg = a.bg, bg = b.yellow, bold = bold },
   -- IncSearch = {},
-  MatchParen = 'Substitute',
+  -- MatchParen = defined in vim-matchup section below
   Search = { fg = a.bg, bg = d.yellow, bold = bold },
   Substitute = { bg = d.red, bold = bold },
   Visual = { bg = a.sel },
@@ -640,6 +640,13 @@ for name, attrs in pairs {
   RainbowDelimiterGreen = { fg = b.green },
   RainbowDelimiterViolet = { fg = c.magenta },
   RainbowDelimiterCyan = { fg = b.cyan },
+
+  ---- "andymass/vim-matchup" :h matchup-highlight-groups ----
+
+  MatchParen = { fg = b.cyan, bold = bold },
+  MatchParenCur = { fg = b.cyan, bold = bold },
+  MatchWord = { fg = b.cyan, bold = bold, underline = underline },
+  MatchWordCur = { fg = b.cyan, bold = bold, underline = underline },
 } do
   if type(attrs) == 'table' then
     vim.api.nvim_set_hl(0, name, attrs)
