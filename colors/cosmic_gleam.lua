@@ -11,6 +11,7 @@ local a = palette.a -- Grays
 local b = palette.b -- Bright foreground colors
 local c = palette.c -- Foreground colors
 local d = palette.d -- Background colors
+local git = palette.git -- Git Diff colors
 
 local bold, italic, underline, undercurl, strikethrough
 if vim.g.cosmic_gleam_enable_font_variants == true or vim.g.cosmic_gleam_enable_font_variants == nil then
@@ -114,13 +115,23 @@ for name, attrs in pairs {
 
   ---- :help :diff -------------------------------------------
 
-  DiffAdd = { bg = d.green },
-  DiffChange = { bg = d.magenta },
-  DiffDelete = { fg = a.com, bg = d.red },
-  DiffText = 'DiffAdd',
+  DiffAdd = { bg = git.add_bg },
+  DiffChange = { bg = git.chg_bg },
+  DiffDelete = { fg = git.filler, bg = git.del_bg },
+  DiffText = { bg = git.add_bg, fg = git.add_fg },
 
   DiffAdded = 'DiffAdd',
   DiffRemoved = 'DiffDelete',
+
+  ---- Custom CodeDiff Highlighting --------------------------
+
+  CodeDiffLineInsert = { bg = git.add_bg },
+  CodeDiffLineDelete = { bg = git.del_bg },
+  CodeDiffCharInsert = { fg = git.add_fg },
+  CodeDiffCharDelete = { fg = git.del_fg },
+  CodeDiffFiller = { fg = git.filler },
+  CodeDiffLineMove = { bg = git.chg_bg },
+  CodeDiffMoveTo = { fg = git.chg_bg },
 
   ---- :help spell -------------------------------------------
 

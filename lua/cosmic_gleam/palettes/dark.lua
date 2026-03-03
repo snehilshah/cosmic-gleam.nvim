@@ -34,4 +34,12 @@ return {
     blue    = "#394a48",
     magenta = "#533e45",
   },
+  git = {
+    add_bg  = "#2b3b28",
+    add_fg  = "#89b482",
+    del_bg  = "#4a2424",
+    del_fg  = "#ea6962",
+    chg_bg  = "#3a2b4b",
+    filler  = "#928374",
+  },
 }
