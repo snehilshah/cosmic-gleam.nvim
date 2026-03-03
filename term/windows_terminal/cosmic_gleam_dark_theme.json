@@ -2,13 +2,13 @@
     "name": "cosmic_gleam dark",
     "tab": 
     {
-      "background": "#292522FF",
+      "background": "#1d2021FF",
       "unfocusedBackground": null
     },
     "tabRow": 
     {
-      "background": "#34302CFF",
-      "unfocusedBackground": "#34302CFF"
+      "background": "#191b1cFF",
+      "unfocusedBackground": "#191b1cFF"
     },
     "window": 
       {

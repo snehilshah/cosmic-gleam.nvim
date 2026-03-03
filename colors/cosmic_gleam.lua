@@ -4,7 +4,7 @@ vim.g.colors_name = 'cosmic_gleam'
 
 local bg = vim.opt.background:get()
 
--- package.loaded['cosmic_gleam/palettes/' .. bg] = nil -- Only needed for development
+package.loaded['cosmic_gleam/palettes/' .. bg] = nil -- Only needed for development
 local palette = require('cosmic_gleam/palettes/' .. bg)
 
 local a = palette.a -- Grays
@@ -73,13 +73,13 @@ for name, attrs in pairs {
   ComplMatchIns = { fg = a.com },
   WildMenu = 'NormalFloat',
 
-  StatusLine = 'NormalFloat',
-  StatusLineNC = { fg = a.com, bg = a.float },
+  StatusLine = { fg = a.ui, bg = a.bg },
+  StatusLineNC = { fg = a.ui, bg = a.bg },
   -- StatusLineTerm = {},
   -- StatusLineTermNC = {},
   TabLine = 'StatusLineNC',
   TabLineFill = 'StatusLine',
-  TabLineSel = { bg = a.float, bold = bold },
+  TabLineSel = { fg = a.fg, bg = a.bg, bold = bold },
   -- WinBar = {},
   -- WinBarNC = {},
 
@@ -133,37 +133,36 @@ for name, attrs in pairs {
 
   Comment = { fg = a.com, italic = italic },
   Identifier = { fg = a.fg },
-  Function = { fg = b.yellow },
-  Constant = { fg = c.magenta },
-  String = { fg = b.blue, italic = italic },
-  Character = { fg = c.blue },
+  Function = { fg = b.green },
+  Constant = { fg = b.magenta },
+  String = { fg = b.yellow },
+  Character = { fg = b.yellow },
   Number = { fg = b.magenta },
   Boolean = 'Number',
-  -- Float = {},
 
-  Statement = { fg = c.yellow },
+  Statement = { fg = b.red },
   -- Conditional = {},
   -- Repeat = {},
   -- Label = {},
-  Operator = { fg = b.red },
-  -- Keyword = {},
+  Operator = { fg = b.orange },
+  Keyword = { fg = b.red },
   -- Exception = {},
 
-  PreProc = { fg = b.green },
+  PreProc = { fg = b.cyan },
   -- Include = {},
   -- Define = {},
   -- Macro = {},
   -- PreCondit = {},
 
-  Type = { fg = c.cyan },
+  Type = { fg = b.blue },
   -- StorageClass = {},
   -- Structure = {},
   -- Typedef = {},
 
-  Special = { fg = b.yellow },
+  Special = { fg = b.green },
   -- SpecialChar = {},
   -- Tag = {},
-  Delimiter = { fg = d.yellow },
+  Delimiter = { fg = a.fg },
   -- SpecialComment = {},
   -- Debug = {},
 
@@ -194,13 +193,13 @@ for name, attrs in pairs {
   ['@label'] = { fg = b.cyan },
 
   -- ['@string'] = {},
-  ['@string.documentation'] = { fg = b.blue, nocombine = true },
-  ['@string.escape'] = { fg = c.blue },
-  ['@string.regexp'] = { fg = b.blue },
+  ['@string.documentation'] = { link = 'Comment' },
+  ['@string.escape'] = { fg = b.green },
+  ['@string.regexp'] = { fg = b.yellow },
   ['@string.special'] = { fg = b.cyan },
   ['@string.special.symbol'] = { fg = a.fg, italic = italic },
   ['@string.special.path'] = 'Directory',
-  ['@string.special.url'] = { fg = c.blue },
+  ['@string.special.url'] = { fg = b.blue },
 
   -- ['@character'] = {},
   -- ['@character.special'] = {},
@@ -241,7 +240,7 @@ for name, attrs in pairs {
   -- ['@keyword.directive.define'] = {},
 
   -- ['@punctuation.bracket'] = {},
-  ['@punctuation.delimiter'] = { fg = c.red },
+  ['@punctuation.delimiter'] = { fg = a.fg },
   -- ['@punctuation.special'] = {},
 
   -- ['@comment'] = {},
@@ -289,16 +288,16 @@ for name, attrs in pairs {
 
   ---- :help diagnostic-highlight ----------------------------
 
-  DiagnosticError = { fg = c.red },
+  DiagnosticError = { fg = b.red },
   DiagnosticWarn = { fg = b.yellow },
-  DiagnosticInfo = { fg = c.blue },
-  DiagnosticHint = { fg = c.cyan },
-  DiagnosticOk = { fg = c.green },
-  DiagnosticUnderlineError = { undercurl = undercurl, sp = c.red },
+  DiagnosticInfo = { fg = a.com },
+  DiagnosticHint = { fg = b.green },
+  DiagnosticOk = { fg = b.green },
+  DiagnosticUnderlineError = { undercurl = undercurl, sp = b.red },
   DiagnosticUnderlineWarn = { undercurl = undercurl, sp = b.yellow },
-  DiagnosticUnderlineInfo = { undercurl = undercurl, sp = c.blue },
-  DiagnosticUnderlineHint = { undercurl = undercurl, sp = c.cyan },
-  DiagnosticUnderlineOk = { undercurl = undercurl, sp = c.green },
+  DiagnosticUnderlineInfo = { undercurl = undercurl, sp = a.com },
+  DiagnosticUnderlineHint = { undercurl = undercurl, sp = b.green },
+  DiagnosticUnderlineOk = { undercurl = undercurl, sp = b.green },
   -- DiagnosticVirtualTextError = {},
   -- DiagnosticVirtualTextWarn = {},
   -- DiagnosticVirtualTextInfo = {},
@@ -414,9 +413,9 @@ for name, attrs in pairs {
   -- MiniDepsTitleSame = {},
   -- MiniDepsTitleUpdate = {},
 
-  MiniDiffSignAdd = { fg = c.green },
-  MiniDiffSignChange = { fg = c.magenta },
-  MiniDiffSignDelete = { fg = c.red },
+  MiniDiffSignAdd = { fg = b.green },
+  MiniDiffSignChange = { fg = b.cyan },
+  MiniDiffSignDelete = { fg = b.red },
   -- MiniDiffOverAdd = {},
   -- MiniDiffOverChange = {},
   -- MiniDiffOverChangeBuf = {},
@@ -626,10 +625,10 @@ for name, attrs in pairs {
   ---- "nvim-neo-tree/neo-tree.nvim" :h neo-tree-highlights
 
   NeoTreeFloatBorder = 'Normal',
-  NeoTreeNormal = 'Pmenu',
+  NeoTreeNormal = 'Normal',
   NeoTreeNormalNC = 'NeoTreeNormal',
   NeoTreeCursorLine = 'PmenuSel',
-  NeoTreeWinSeparator = { fg = a.bg, bg = a.bg }, -- hide
+  NeoTreeWinSeparator = { fg = a.ui, bg = a.bg },
 
   ---- "hiphish/rainbow-delimiters.nvim" :h rb-delimiters-colors
 

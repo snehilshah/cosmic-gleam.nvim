@@ -1,13 +1,13 @@
 cosmic-gleam-dark {
-  fg #ECE1D7
-  bg #292522
-  black #34302C
-  white #C1A78E
-  red #BD8183
-  green #78997A
-  yellow #E49B5D
-  blue #7F91B2
-  magenta #B380B0
-  cyan #7B9695
-  orange #8B7449
+  fg #ebdbb2
+  bg #1d2021
+  black #191b1c
+  white #a89984
+  red #ea6962
+  green #a9b665
+  yellow #d8a657
+  blue #7daea3
+  magenta #d3869b
+  cyan #89b482
+  orange #544731
 }

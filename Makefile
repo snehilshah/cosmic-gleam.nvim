@@ -1,4 +1,4 @@
 build: lua/cosmic_gleam/*
-	nvim --headless -u NORC \
-		--cmd 'lua require("cosmic_gleam.build").build()' \
-		--cmd 'quit'
+	nvim --headless --clean -c "set rtp+=." \
+		-c 'lua require("cosmic_gleam.build").build()' \
+		-c 'quit'
