@@ -1,3 +1,6 @@
+require('cosmic_gleam').setup()
+
+-- BEFORE --
 vim.cmd 'highlight clear'
 vim.cmd 'syntax reset'
 vim.g.colors_name = 'cosmic_gleam'
@@ -30,9 +33,22 @@ elseif type(vim.g.cosmic_gleam_enable_font_variants) == 'table' then
   strikethrough = vim.g.cosmic_gleam_enable_font_variants.strikethrough
 end
 
+local function recursive_to_hex(t)
+  if type(t) ~= 'table' then
+    return t
+  end
+  if t.to_hex then
+    return t:to_hex()
+  end
+  local res = {}
+  for k, v in pairs(t) do
+    res[k] = recursive_to_hex(v)
+  end
+  return res
+end
+
 for name, attrs in pairs {
   ---- :help highlight-default -------------------------------
-
   Normal = { fg = a.fg, bg = a.bg },
   NormalFloat = { bg = a.float },
   -- FloatBorder = { },
@@ -74,8 +90,8 @@ for name, attrs in pairs {
   ComplMatchIns = { fg = a.com },
   WildMenu = 'NormalFloat',
 
-  StatusLine = { fg = a.ui, bg = a.bg },
-  StatusLineNC = { fg = a.ui, bg = a.bg },
+  StatusLine = { fg = a.ui, bg = a.float, reverse = false },
+  StatusLineNC = { fg = a.ui, bg = a.float, reverse = false },
   -- StatusLineTerm = {},
   -- StatusLineTermNC = {},
   TabLine = 'StatusLineNC',
@@ -118,7 +134,7 @@ for name, attrs in pairs {
   DiffAdd = { bg = git.add_bg },
   DiffChange = { bg = git.chg_bg },
   DiffDelete = { fg = git.filler, bg = git.del_bg },
-  DiffText = { bg = git.add_bg, fg = git.add_fg },
+  DiffText = { bg = git.chg_emph_bg, fg = git.emph_fg },
 
   DiffAdded = 'DiffAdd',
   DiffRemoved = 'DiffDelete',
@@ -127,8 +143,8 @@ for name, attrs in pairs {
 
   CodeDiffLineInsert = { bg = git.add_bg },
   CodeDiffLineDelete = { bg = git.del_bg },
-  CodeDiffCharInsert = { fg = git.add_fg },
-  CodeDiffCharDelete = { fg = git.del_fg },
+  CodeDiffCharInsert = { bg = git.add_emph_bg, fg = git.emph_fg },
+  CodeDiffCharDelete = { bg = git.del_emph_bg, fg = git.emph_fg },
   CodeDiffFiller = { fg = git.filler },
   CodeDiffLineMove = { bg = git.chg_bg },
   CodeDiffMoveTo = { fg = git.chg_bg },
@@ -659,28 +675,63 @@ for name, attrs in pairs {
   MatchWordCur = { fg = b.cyan, bold = bold, underline = underline },
 } do
   if type(attrs) == 'table' then
-    vim.api.nvim_set_hl(0, name, attrs)
+    vim.api.nvim_set_hl(0, name, recursive_to_hex(attrs))
   else
     vim.api.nvim_set_hl(0, name, { link = attrs })
   end
 end
 
 -- See https://github.com/neovim/neovim/pull/7406
-vim.g.terminal_color_0 = a.float
-vim.g.terminal_color_1 = c.red
-vim.g.terminal_color_2 = c.green
-vim.g.terminal_color_3 = c.yellow
-vim.g.terminal_color_4 = c.blue
-vim.g.terminal_color_5 = c.magenta
-vim.g.terminal_color_6 = c.cyan
-vim.g.terminal_color_7 = a.com
-vim.g.terminal_color_8 = a.ui
-vim.g.terminal_color_9 = b.red
-vim.g.terminal_color_10 = b.green
-vim.g.terminal_color_11 = b.yellow
-vim.g.terminal_color_12 = b.blue
-vim.g.terminal_color_13 = b.magenta
-vim.g.terminal_color_14 = b.cyan
-vim.g.terminal_color_15 = a.fg
+vim.g.terminal_color_0 = recursive_to_hex(a.float)
+vim.g.terminal_color_1 = recursive_to_hex(c.red)
+vim.g.terminal_color_2 = recursive_to_hex(c.green)
+vim.g.terminal_color_3 = recursive_to_hex(c.yellow)
+vim.g.terminal_color_4 = recursive_to_hex(c.blue)
+vim.g.terminal_color_5 = recursive_to_hex(c.magenta)
+vim.g.terminal_color_6 = recursive_to_hex(c.cyan)
+vim.g.terminal_color_7 = recursive_to_hex(a.com)
+vim.g.terminal_color_8 = recursive_to_hex(a.ui)
+vim.g.terminal_color_9 = recursive_to_hex(b.red)
+vim.g.terminal_color_10 = recursive_to_hex(b.green)
+vim.g.terminal_color_11 = recursive_to_hex(b.yellow)
+vim.g.terminal_color_12 = recursive_to_hex(b.blue)
+vim.g.terminal_color_13 = recursive_to_hex(b.magenta)
+vim.g.terminal_color_14 = recursive_to_hex(b.cyan)
+-- ==============================================================================
+-- Plugin Overrides / Fixes
+-- ==============================================================================
+-- The `codediff.nvim` plugin has a `ColorScheme` autocmd that aggressively overwrites
+-- `CodeDiffCharInsert` / `CodeDiffCharDelete` and strips any `fg` attributes defined
+-- by the theme. To bypass this, we schedule a re-application of our explicitly
+-- designed fg/bg contrast settings so they execute *after* the plugin's autocmd.
+
+local function fix_codediff_fg()
+  local git_pal = git
+  if not git_pal then
+    local p = require('cosmic_gleam.palettes').get_palette()
+    git_pal = p.git
+  end
+  if git_pal then
+    vim.api.nvim_set_hl(0, 'CodeDiffCharInsert', recursive_to_hex({ bg = git_pal.add_emph_bg, fg = git_pal.emph_fg }))
+    vim.api.nvim_set_hl(0, 'CodeDiffCharDelete', recursive_to_hex({ bg = git_pal.del_emph_bg, fg = git_pal.emph_fg }))
+  end
+end
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = 'cosmic_gleam',
+  callback = function()
+    vim.schedule(fix_codediff_fg)
+  end,
+})
+
+-- Catch lazy.nvim loading codediff (since standard ColorScheme runs before lazy load)
+pcall(vim.api.nvim_create_autocmd, 'User', {
+  pattern = 'LazyLoad',
+  callback = function(event)
+    if event.data == 'codediff.nvim' then
+      vim.schedule(fix_codediff_fg)
+    end
+  end,
+})
 
 -- vi:nowrap

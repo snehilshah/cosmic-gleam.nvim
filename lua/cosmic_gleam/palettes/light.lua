@@ -1,43 +1,52 @@
--- stylua: ignore
-return {
+-- stylua: ignore start
+
+local hsl = require("cosmic_gleam.helpers.hsl").hsl
+
+-- Define the base palette using hex codes to convert to HSL objects initially.
+-- Once converted, you can manipulate them like: `bg:lighten(10)` or `fg:darken(20)`
+local p = {
   a = {
-    bg      = "#F1F1F1",
-    float   = "#E9E1DB",
-    sel     = "#D9D3CE",
-    ui      = "#A98A78",
-    com     = "#7D6658",
-    fg      = "#54433A",
+    bg      = hsl(0, 0, 95),
+    float   = hsl(26, 24, 89),
+    sel     = hsl(27, 13, 83),
+    ui      = hsl(22, 22, 57),
+    com     = hsl(23, 17, 42),
+    fg      = hsl(21, 18, 28),
   },
   b = {
-    red     = "#BF0021",
-    yellow  = "#A06D00",
-    green   = "#3A684A",
-    cyan    = "#3D6568",
-    blue    = "#465AA4",
-    magenta = "#904180",
+    red     = hsl(350, 100, 37),
+    yellow  = hsl(41, 100, 31),
+    green   = hsl(141, 28, 32),
+    cyan    = hsl(184, 26, 32),
+    blue    = hsl(227, 40, 46),
+    magenta = hsl(312, 38, 41),
   },
   c = {
-    red     = "#C77B8B",
-    yellow  = "#BC5C00",
-    green   = "#6E9B72",
-    cyan    = "#739797",
-    blue    = "#7892BD",
-    magenta = "#BE79BB",
+    red     = hsl(347, 40, 63),
+    yellow  = hsl(29, 100, 37),
+    green   = hsl(125, 18, 52),
+    cyan    = hsl(180, 15, 52),
+    blue    = hsl(217, 34, 61),
+    magenta = hsl(303, 35, 61),
   },
   d = {
-    red     = "#F1DEDF",
-    yellow  = "#CCA478",
-    green   = "#D0E9D1",
-    cyan    = "#CDE8E7",
-    blue    = "#E0E2E8",
-    magenta = "#E8E0E8",
+    red     = hsl(357, 40, 91),
+    yellow  = hsl(31, 45, 64),
+    green   = hsl(122, 36, 86),
+    cyan    = hsl(178, 37, 86),
+    blue    = hsl(225, 15, 89),
+    magenta = hsl(300, 15, 89),
   },
   git = {
-    add_bg  = "#D0E9D1",
-    add_fg  = "#3A684A",
-    del_bg  = "#F1DEDF",
-    del_fg  = "#BF0021",
-    chg_bg  = "#E8E0E8",
-    filler  = "#7D6658",
+    add_bg       = hsl(127, 24, 93), -- Very light green
+    add_emph_bg  = hsl(128, 28, 79), -- Softer medium green char bg
+    del_bg       = hsl(6, 70, 95),   -- Very light red
+    del_emph_bg  = hsl(2, 67, 82),   -- Softer medium red char bg
+    chg_bg       = hsl(220, 23, 95), -- Very light blue
+    chg_emph_bg  = hsl(222, 25, 79), -- Softer medium blue char bg
+    emph_fg      = hsl(21, 18, 28),  -- Gruvbox a.fg (Normal char fg, no longer inverted)
+    filler       = hsl(23, 17, 42),  -- Gruvbox a.com
   },
 }
+
+return p
